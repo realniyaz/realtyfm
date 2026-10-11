@@ -217,7 +217,7 @@ export default function RealtyChatbot() {
                   placeholder="Ask about Gaur, ACE, offices, sizes..."
                   className="flex-1 px-4 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E8DFD1] focus:border-[#B89246] focus:outline-none text-xs text-[#1A1815] transition-colors"
                 />
-                <button
+                <button suppressHydrationWarning
                   type="submit"
                   disabled={!input.trim()}
                   aria-label="Send message"
