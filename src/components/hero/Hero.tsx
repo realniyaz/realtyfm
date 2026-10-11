@@ -49,7 +49,7 @@ export default function Hero() {
         c.toLowerCase().includes(cleanQuery)
       );
       return matchTitle || matchDev || matchLoc || matchConfig;
-    }).slice(0, 4);
+    });
   }, [query]);
 
   return (
@@ -64,7 +64,6 @@ export default function Hero() {
           quality={95}
           className="object-cover object-bottom sm:object-center"
         />
-        {/* Soft luxury tint: balances sky brightness while preserving the golden dawn horizon */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0C0D0E] via-[#0C0D0E]/55 to-black/30 z-10" />
       </div>
 
@@ -169,7 +168,7 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Live Search Modal */}
+          {/* SCROLL-OPTIMIZED DROPDOWN CONTAINER */}
           <AnimatePresence>
             {isFocused && query.trim().length > 0 && (
               <motion.div
@@ -177,26 +176,34 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 6, scale: 0.98 }}
                 transition={{ duration: 0.18 }}
-                className="absolute left-0 right-0 top-full mt-2 rounded-2xl bg-white text-[#1A1815] border border-[#B89246]/40 shadow-[0_20px_50px_rgba(0,0,0,0.4)] overflow-hidden z-50 text-left max-h-[65vh] overflow-y-auto"
+                className="absolute left-0 right-0 top-full mt-2 rounded-2xl bg-white text-[#1A1815] border border-[#B89246]/40 shadow-[0_20px_50px_rgba(0,0,0,0.4)] overflow-hidden z-50 text-left flex flex-col max-h-[58vh] sm:max-h-[64vh]"
               >
-                {searchResults.length > 0 ? (
-                  <div className="p-3 sm:p-3.5 space-y-2">
-                    <div className="flex items-center justify-between pb-1.5 border-b border-neutral-100 px-1">
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-[#865F27]">
-                        Verified Matches ({searchResults.length})
-                      </span>
-                      <span className="text-[10px] text-neutral-400">
-                        Live Preview
-                      </span>
-                    </div>
+                {/* Fixed Sticky Header */}
+                <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#FAF7F0] border-b border-[#E8DFD1] flex-shrink-0">
+                  <span className="text-[10px] sm:text-[11px] uppercase font-bold tracking-wider text-[#865F27]">
+                    Matching Portfolios ({searchResults.length})
+                  </span>
+                  <span className="text-[10px] text-neutral-500 font-medium">
+                    Scroll to view all
+                  </span>
+                </div>
 
-                    {searchResults.map((proj) => (
+                {/* Hardware-Accelerated Smooth Scroll Body */}
+                <div
+                  className="flex-1 overflow-y-auto overscroll-contain p-2.5 sm:p-3 space-y-2 [scrollbar-width:thin] [scrollbar-color:#B89246_#FAF7F0]"
+                  style={{
+                    WebkitOverflowScrolling: "touch",
+                  }}
+                >
+                  {searchResults.length > 0 ? (
+                    searchResults.map((proj) => (
                       <div
                         key={proj.id}
-                        className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-[#FAF7F0] border border-transparent hover:border-[#E8DFD1] transition-all"
+                        className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 p-2.5 rounded-xl hover:bg-[#FAF7F0] border border-neutral-100 hover:border-[#E8DFD1] transition-all"
                       >
-                        <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100">
+                        {/* Project Card Media & Meta */}
+                        <div className="flex items-center gap-3 w-full sm:w-auto">
+                          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100 border border-neutral-200">
                             <Image
                               src={proj.image || "/banner2.png"}
                               alt={proj.title}
@@ -208,7 +215,7 @@ export default function Hero() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#865F27] uppercase tracking-wider">
                               <Building className="w-2.5 h-2.5 flex-shrink-0" />
-                              <span>{proj.developer}</span>
+                              <span className="truncate">{proj.developer}</span>
                             </div>
                             <h4 className="text-xs sm:text-sm font-serif font-bold text-[#1A1815] truncate">
                               {proj.title}
@@ -220,38 +227,42 @@ export default function Hero() {
                           </div>
                         </div>
 
+                        {/* Direct Portfolio Link */}
                         <Link
-                          href={`/portfolio`}
+                          href="/portfolio"
                           onClick={() => setIsFocused(false)}
-                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg bg-[#14171A] hover:bg-[#B89246] text-[#FAF8F5] hover:text-[#0C0D0E] text-[10px] font-semibold tracking-wide transition-colors flex-shrink-0 shadow-sm"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3.5 py-1.5 rounded-lg bg-[#14171A] hover:bg-[#B89246] text-[#FAF8F5] hover:text-[#0C0D0E] text-[11px] font-semibold tracking-wide transition-colors flex-shrink-0 shadow-sm"
                         >
                           <span>View in Portfolio</span>
                           <ArrowUpRight className="w-3 h-3" />
                         </Link>
                       </div>
-                    ))}
-
-                    <div className="pt-2 border-t border-neutral-100 text-center">
+                    ))
+                  ) : (
+                    <div className="py-8 px-4 text-center">
+                      <p className="text-xs sm:text-sm text-neutral-600 font-serif">
+                        No development found matching &quot;{query}&quot;.
+                      </p>
                       <Link
                         href="/portfolio"
                         onClick={() => setIsFocused(false)}
-                        className="text-[11px] font-semibold text-[#865F27] hover:underline"
+                        className="inline-block mt-3 px-4 py-2 rounded-full bg-[#FAF7F0] border border-[#B89246]/40 text-[11px] font-semibold text-[#865F27]"
                       >
-                        Browse complete 16+ project portfolio →
+                        Browse Master Portfolio
                       </Link>
                     </div>
-                  </div>
-                ) : (
-                  <div className="p-5 text-center">
-                    <p className="text-xs text-neutral-600 font-serif">
-                      No development found matching &quot;{query}&quot;.
-                    </p>
+                  )}
+                </div>
+
+                {/* Fixed Sticky Footer */}
+                {searchResults.length > 0 && (
+                  <div className="p-2.5 bg-[#FAF7F0] border-t border-[#E8DFD1] text-center flex-shrink-0">
                     <Link
                       href="/portfolio"
                       onClick={() => setIsFocused(false)}
-                      className="inline-block mt-2 px-3.5 py-1.5 rounded-full bg-[#FAF7F0] border border-[#B89246]/40 text-[11px] font-semibold text-[#865F27]"
+                      className="text-[11px] font-semibold text-[#865F27] hover:underline"
                     >
-                      Browse Master Portfolio
+                      Browse complete verified portfolio →
                     </Link>
                   </div>
                 )}
