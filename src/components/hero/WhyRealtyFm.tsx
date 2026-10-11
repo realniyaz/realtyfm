@@ -101,145 +101,74 @@ export default function WhyRealtyFM() {
   return (
     <section
       id="advantages"
-      className="relative w-full bg-[#FAF8F5] py-20 sm:py-28 lg:py-32 text-[#1A1815] overflow-hidden border-b border-[#E8DFD1]"
+      className="relative w-full bg-[#FAF8F5] py-14 sm:py-20 lg:py-28 text-[#1A1815] overflow-hidden border-b border-[#E8DFD1]"
     >
-      {/* Ambient luxury lighting */}
-      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[#B89246]/6 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-[#B89246]/5 rounded-full blur-3xl pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Heading & Mobile Controls */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 sm:mb-16 lg:mb-20 gap-6">
+        {/* Section Heading & Mobile Top Bar Controls */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 sm:mb-12 gap-5">
           <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F5EFEB] border border-[#B89246]/35 text-[#865F27] text-xs font-semibold uppercase tracking-[0.25em] mb-4 shadow-sm"
-            >
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F5EFEB] border border-[#B89246]/35 text-[#865F27] text-[10px] sm:text-xs font-semibold uppercase tracking-[0.25em] mb-3 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#B89246]" />
               <span>The Realty FM Advantage</span>
-            </motion.div>
+            </div>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-3xl sm:text-5xl lg:text-6xl font-serif text-[#1A1815] tracking-tight leading-[1.12]"
-            >
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif text-[#1A1815] tracking-tight leading-tight">
               Why Investors Choose{" "}
               <span className="italic text-[#865F27] font-normal">Realty FM.</span>
-            </motion.h2>
+            </h2>
 
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-4 text-xs sm:text-sm lg:text-base text-neutral-600 font-light leading-relaxed max-w-2xl"
-            >
+            <p className="mt-2 text-xs sm:text-sm md:text-base text-neutral-600 font-light leading-relaxed max-w-2xl">
               We operate as your private property wealth architect, combining strict legal audit protocols with direct allocations across tier-1 developer inventory.
-            </motion.p>
+            </p>
           </div>
 
-          {/* Navigation Controls for Tablets and Mobile */}
-          <div className="flex lg:hidden items-center gap-2.5 self-end">
-            <button
-              onClick={() => handleScroll("left")}
-              disabled={!canScrollLeft}
-              aria-label="Scroll Left"
-              className="p-3 rounded-full bg-white border border-[#B89246]/40 text-[#865F27] shadow-sm disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 transition-all"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => handleScroll("right")}
-              disabled={!canScrollRight}
-              aria-label="Scroll Right"
-              className="p-3 rounded-full bg-white border border-[#B89246]/40 text-[#865F27] shadow-sm disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 transition-all"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* 1. DESKTOP VIEW: Structured 3-Column Luxury Architecture Grid (lg and above) */}
-        <div className="hidden lg:grid grid-cols-3 gap-8">
-          {ADVANTAGES.map((adv, idx) => {
-            const Icon = adv.icon;
-            return (
-              <motion.div
-                key={`desktop-${adv.title}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="group relative flex flex-col justify-between p-8 xl:p-9 rounded-2xl bg-white border border-[#E8DFD1] hover:border-[#B89246]/60 shadow-[0_4px_20px_rgba(184,146,70,0.05)] hover:shadow-[0_16px_40px_rgba(184,146,70,0.12)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden"
+          {/* Navigation Buttons (Aligned properly on mobile) */}
+          <div className="flex lg:hidden items-center justify-between sm:justify-end gap-3 w-full sm:w-auto pt-1">
+            <span className="text-[11px] uppercase tracking-wider text-neutral-500 font-medium sm:hidden">
+              Swipe to explore
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handleScroll("left")}
+                disabled={!canScrollLeft}
+                aria-label="Scroll Left"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#B89246]/40 text-[#865F27] shadow-sm disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 transition-all"
               >
-                {/* Subtle Luxury Number Watermark */}
-                <span className="absolute top-4 right-6 font-serif text-5xl font-bold text-neutral-100 group-hover:text-[#B89246]/10 transition-colors pointer-events-none select-none">
-                  {adv.num}
-                </span>
-
-                <div>
-                  {/* Top Bar with Icon & Badge */}
-                  <div className="flex items-center justify-between mb-6 relative z-10">
-                    <div className="w-13 h-13 rounded-xl bg-[#FAF7F0] border border-[#B89246]/30 flex items-center justify-center text-[#865F27] group-hover:bg-[#B89246] group-hover:text-white transition-all duration-300 shadow-sm">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[10px] uppercase font-bold tracking-widest text-[#865F27] bg-[#F5EFEB] px-3 py-1 rounded-full border border-[#E8DFD1]">
-                      {adv.badge}
-                    </span>
-                  </div>
-
-                  {/* Title & Description */}
-                  <h3 className="text-xl xl:text-2xl font-serif font-bold text-[#1A1815] tracking-tight mb-3 group-hover:text-[#865F27] transition-colors relative z-10">
-                    {adv.title}
-                  </h3>
-
-                  <p className="text-sm text-neutral-600 leading-relaxed font-light relative z-10">
-                    {adv.description}
-                  </p>
-                </div>
-
-                {/* Footer Accent */}
-                <div className="pt-6 mt-6 border-t border-neutral-100 flex items-center justify-between text-xs font-semibold text-[#865F27] relative z-10">
-                  <span className="tracking-wide">Institutional Standard</span>
-                  <div className="w-2 h-2 rounded-full bg-[#B89246]/40 group-hover:bg-[#B89246] group-hover:scale-125 transition-all" />
-                </div>
-              </motion.div>
-            );
-          })}
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleScroll("right")}
+                disabled={!canScrollRight}
+                aria-label="Scroll Right"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#B89246]/40 text-[#865F27] shadow-sm disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 transition-all"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* 2. MOBILE & TABLET VIEW: Smooth Horizontal Swipe Track (<lg) */}
-        <div
-          ref={scrollContainerRef}
-          onScroll={checkScrollBounds}
-          className="lg:hidden flex items-stretch gap-5 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory no-scrollbar select-none"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
+        {/* 1. Desktop 3-Column Grid */}
+        <div className="hidden lg:grid grid-cols-3 gap-6">
           {ADVANTAGES.map((adv) => {
             const Icon = adv.icon;
             return (
               <div
-                key={`mobile-${adv.title}`}
-                className="snap-start shrink-0 w-[84vw] sm:w-[380px] flex flex-col justify-between p-7 rounded-2xl bg-white border border-[#E8DFD1] shadow-[0_4px_20px_rgba(184,146,70,0.06)]"
+                key={`desktop-${adv.title}`}
+                className="group relative flex flex-col justify-between p-7 rounded-2xl bg-white border border-[#E8DFD1] hover:border-[#B89246]/60 shadow-[0_4px_20px_rgba(184,146,70,0.05)] hover:shadow-[0_12px_30px_rgba(184,146,70,0.12)] transition-all duration-300 hover:-translate-y-1"
               >
                 <div>
                   <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-xl bg-[#FAF7F0] border border-[#B89246]/30 flex items-center justify-center text-[#865F27]">
-                      <Icon className="w-6 h-6" />
+                    <div className="w-11 h-11 rounded-xl bg-[#FAF7F0] border border-[#B89246]/30 flex items-center justify-center text-[#865F27] group-hover:bg-[#B89246] group-hover:text-white transition-all shadow-sm">
+                      <Icon className="w-5 h-5" />
                     </div>
                     <span className="text-[10px] uppercase font-bold tracking-widest text-[#865F27] bg-[#F5EFEB] px-2.5 py-1 rounded-md border border-[#E8DFD1]">
                       {adv.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-serif font-bold text-[#1A1815] mb-2.5">
+                  <h3 className="text-lg font-serif font-bold text-[#1A1815] tracking-tight mb-2 group-hover:text-[#865F27] transition-colors">
                     {adv.title}
                   </h3>
 
@@ -249,6 +178,48 @@ export default function WhyRealtyFM() {
                 </div>
 
                 <div className="pt-5 mt-5 border-t border-neutral-100 flex items-center justify-between text-xs font-semibold text-[#865F27]">
+                  <span className="tracking-wide">Institutional Standard</span>
+                  <div className="w-2 h-2 rounded-full bg-[#B89246]" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 2. Mobile Horizontal Swipe Track (Fixed Dimensions & Snapping) */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={checkScrollBounds}
+          className="lg:hidden flex items-stretch gap-4 overflow-x-auto pb-4 pt-1 scroll-smooth snap-x snap-mandatory no-scrollbar select-none"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {ADVANTAGES.map((adv) => {
+            const Icon = adv.icon;
+            return (
+              <div
+                key={`mobile-${adv.title}`}
+                className="snap-center shrink-0 w-[84vw] max-w-[320px] sm:w-[350px] flex flex-col justify-between p-5 rounded-2xl bg-white border border-[#E8DFD1] shadow-sm"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-[#FAF7F0] border border-[#B89246]/30 flex items-center justify-center text-[#865F27]">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-[9px] uppercase font-bold tracking-widest text-[#865F27] bg-[#F5EFEB] px-2 py-0.5 rounded-md border border-[#E8DFD1]">
+                      {adv.badge}
+                    </span>
+                  </div>
+
+                  <h3 className="text-base font-serif font-bold text-[#1A1815] mb-1.5 leading-snug">
+                    {adv.title}
+                  </h3>
+
+                  <p className="text-xs text-neutral-600 leading-relaxed font-light">
+                    {adv.description}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-neutral-100 flex items-center justify-between text-xs font-semibold text-[#865F27]">
                   <span>Pillar {adv.num}</span>
                   <div className="w-2 h-2 rounded-full bg-[#B89246]" />
                 </div>
@@ -257,59 +228,42 @@ export default function WhyRealtyFM() {
           })}
         </div>
 
-        {/* Mobile Swipe Guidance Bar */}
-        <div className="flex lg:hidden items-center justify-center gap-1.5 mt-2 text-neutral-400 text-[11px] uppercase tracking-wider font-medium">
-          <span>Swipe horizontally to view all pillars</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-        </div>
-
-        {/* Bottom Executive CTA Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 sm:mt-20 lg:mt-24 rounded-3xl bg-gradient-to-r from-[#14171A] via-[#1E232A] to-[#14171A] p-8 sm:p-12 lg:p-14 text-[#FAF8F5] flex flex-col lg:flex-row items-center justify-between gap-8 border border-[#B89246]/30 shadow-2xl"
-        >
-          <div className="text-center lg:text-left space-y-2 max-w-2xl">
-            <span className="text-[11px] uppercase tracking-[0.25em] text-[#E0C675] font-semibold block">
+        {/* Bottom CTA Banner (Properly Aligned & Stacked on Mobile) */}
+        <div className="mt-10 sm:mt-16 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#14171A] via-[#1E232A] to-[#14171A] p-6 sm:p-10 text-[#FAF8F5] flex flex-col lg:flex-row items-center justify-between gap-6 border border-[#B89246]/30 shadow-xl">
+          <div className="text-center lg:text-left space-y-2 w-full lg:max-w-xl">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-[#E0C675] font-semibold block">
               Private Portfolio Evaluation
             </span>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white tracking-tight">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white tracking-tight">
               Ready to allocate in verified, high-yield assets?
             </h3>
-            <p className="text-neutral-400 text-xs sm:text-sm lg:text-base font-light leading-relaxed">
-              Schedule a one-on-one session with our senior investment managers to assess pre-launch allotments, prime expressway plots, and luxury residences.
+            <p className="text-neutral-400 text-xs sm:text-sm font-light leading-relaxed">
+              Schedule a consultation with our senior investment managers to assess pre-launch allotments and prime locations.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full lg:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
             <a
               href={COMPANY_DATA.primaryContact.whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-[#25D366] hover:bg-[#20BA59] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-98"
             >
-              <div className="relative w-4 h-4">
-                <Image
-                  src="/wh.png"
-                  alt="WhatsApp"
-                  fill
-                  className="object-contain brightness-0 invert"
-                />
+              <div className="relative w-4 h-4 flex-shrink-0">
+                <Image src="/wh.png" alt="WhatsApp" fill className="object-contain brightness-0 invert" />
               </div>
-              <span>WhatsApp Advisor</span>
+              <span className="whitespace-nowrap">WhatsApp Advisor</span>
             </a>
 
             <Link
               href="/contact"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-[#B89246] hover:bg-[#A47B30] text-[#0C0D0E] text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-[#B89246] hover:bg-[#a47b30] text-[#0C0D0E] text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-98"
             >
-              <span>Schedule Desk Meet</span>
-              <ArrowUpRight className="w-4 h-4" />
+              <span className="whitespace-nowrap">Schedule Desk Meet</span>
+              <ArrowUpRight className="w-4 h-4 flex-shrink-0" />
             </Link>
           </div>
-        </motion.div>
+        </div>
 
       </div>
     </section>
