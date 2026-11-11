@@ -1,26 +1,35 @@
+// src/components/contact/ContactCTA.tsx
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Phone,
   Send,
   Loader2,
-  CheckCircle2,
-  Globe2,
   MapPin,
   Clock,
-  Sparkles,
+  Building2,
 } from "lucide-react";
 import { COMPANY_DATA } from "@/data/company";
 import { PROJECTS_DATA } from "@/data/projects";
+
+const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" {...props}>
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M24.504 7.504A11.88 11.88 0 0 0 16.05 4C9.465 4 4.1 9.36 4.1 15.945a11.9 11.9 0 0 0 1.594 5.973L4 28.109l6.336-1.664a11.96 11.96 0 0 0 5.71 1.457h.005c6.586 0 11.945-5.359 11.949-11.949c0-3.191-1.242-6.191-3.496-8.45zM16.05 25.883h-.004a9.93 9.93 0 0 1-5.055-1.383l-.363-.215l-3.762.985l1.004-3.665l-.234-.375a9.9 9.9 0 0 1-1.52-5.285c0-5.472 4.457-9.925 9.938-9.925a9.86 9.86 0 0 1 7.02 2.91a9.88 9.88 0 0 1 2.905 7.023c0 5.477-4.457 9.93-9.93 9.93zm5.445-7.438c-.297-.148-1.766-.87-2.039-.968c-.273-.102-.473-.149-.672.148c-.2.3-.77.973-.945 1.172c-.172.195-.348.223-.645.074c-.3-.148-1.261-.465-2.402-1.484c-.887-.79-1.488-1.77-1.66-2.067c-.176-.3-.02-.46.129-.61c.136-.132.3-.347.449-.523c.148-.171.2-.296.3-.496c.098-.199.048-.375-.027-.523c-.074-.148-.671-1.621-.921-2.219c-.243-.582-.489-.5-.672-.511c-.172-.008-.371-.008-.57-.008c-.2 0-.524.074-.798.375c-.273.297-1.043 1.02-1.043 2.488c0 1.469 1.07 2.89 1.22 3.09c.148.195 2.105 3.21 5.1 4.504a17 17 0 0 0 1.7.629c.715.226 1.367.195 1.883.12c.574-.085 1.765-.722 2.015-1.421c.247-.695.247-1.293.172-1.418c-.074-.125-.273-.2-.574-.352"
+    />
+  </svg>
+);
 
 export default function ContactCTA() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: "",
+    countryCode: "+91",
     phone: "",
     email: "",
     project: "",
@@ -30,8 +39,26 @@ export default function ContactCTA() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  useEffect(() => {
+    const handleProjectSelect = (e: Event) => {
+      const customEvent = e as CustomEvent<{ projectName: string }>;
+      if (customEvent.detail?.projectName) {
+        setFormData((prev) => ({
+          ...prev,
+          project: customEvent.detail.projectName,
+        }));
+      }
+    };
+
+    window.addEventListener("realtyfm:select_project", handleProjectSelect);
+    return () =>
+      window.removeEventListener("realtyfm:select_project", handleProjectSelect);
+  }, []);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -45,13 +72,15 @@ export default function ContactCTA() {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          fullPhone: `${formData.countryCode} ${formData.phone}`,
+        }),
       });
 
       const data = await res.json();
-
       if (!res.ok) {
-        throw new Error(data.error || "Unable to submit your inquiry at this moment.");
+        throw new Error(data.error || "Unable to submit your request right now.");
       }
 
       router.push(`/thank-you?name=${encodeURIComponent(formData.name)}`);
@@ -59,7 +88,7 @@ export default function ContactCTA() {
       if (err instanceof Error) {
         setErrorMsg(err.message);
       } else {
-        setErrorMsg("An unexpected error occurred. Please reach out via WhatsApp directly.");
+        setErrorMsg("Something went wrong. Please call us directly.");
       }
     } finally {
       setLoading(false);
@@ -69,239 +98,243 @@ export default function ContactCTA() {
   return (
     <section
       id="contact"
-      className="relative w-full bg-gradient-to-b from-[#FAF7F0] via-[#F4EEDB] to-[#FAF7F0] py-16 sm:py-24 text-[#1A1815] overflow-hidden border-t border-[#B89246]/25"
+      className="relative w-full bg-[#fbf7ee] py-16 sm:py-24 text-[#0c0d0e]"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Heading */}
+        {/* Centered Header */}
         <div className="flex flex-col items-center text-center mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#B89246]/40 text-[#865F27] text-[10px] sm:text-xs font-semibold uppercase tracking-[0.25em] mb-3 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-[#B89246]" />
-            <span>Private Advisory Mandate</span>
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#f5eed6] border border-[#d4ab47]/40 text-[#865f27] text-xs font-bold uppercase tracking-wider mb-3">
+            <span>Contact Us</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif text-[#1A1815] tracking-tight leading-tight max-w-2xl">
-            Initiate Your Next <span className="italic text-[#865F27] font-normal">Strategic Acquisition.</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#0c0d0e] uppercase tracking-tight leading-tight">
+            Talk to Our Team
           </h2>
 
-          <p className="mt-2.5 text-xs sm:text-sm md:text-base text-neutral-600 max-w-2xl font-light leading-relaxed">
-            Schedule a private portfolio briefing with our senior consultants or request confidential pre-launch allocations.
+          <p className="mt-2 text-xs sm:text-base text-neutral-600 max-w-lg font-sans leading-relaxed">
+            Reach out directly for site visits, project brochures, or quick pricing details.
           </p>
-          <div className="h-0.5 w-14 bg-[#B89246] mt-4" />
         </div>
 
-        {/* 2-Column Responsive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        {/* 2-Column Responsive Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-stretch">
           
-          {/* LEFT: Dual Desks & Contacts */}
-          <div className="lg:col-span-5 space-y-4 sm:space-y-5">
+          {/* LEFT: Office Locations */}
+          <div className="lg:col-span-5 flex flex-col justify-between gap-4">
             
-            {/* India HQ Card */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#B89246]/35 shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#865F27] bg-[#FAF7F0] px-2.5 py-1 rounded-md border border-[#E8DFD1]">
-                  {COMPANY_DATA.offices.india.badge}
+            {/* India Office */}
+            <div className="p-6 rounded-2xl bg-white border border-[#ecdda9] shadow-sm">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white bg-[#865f27] px-2.5 py-1 rounded">
+                  India Office
                 </span>
-                <Globe2 className="w-4 h-4 text-[#B89246]" />
+                <span className="text-xs font-semibold text-neutral-500">Noida, UP</span>
               </div>
 
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-[#1A1815] mb-1.5">
+              <h3 className="text-lg font-serif font-bold text-[#0c0d0e] mb-1">
                 {COMPANY_DATA.offices.india.name}
               </h3>
 
-              <div className="flex items-start gap-2 text-xs text-neutral-600 mb-4 leading-relaxed">
-                <MapPin className="w-4 h-4 text-[#B89246] flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 text-xs sm:text-sm text-neutral-600 mb-5 leading-relaxed">
+                <MapPin className="w-4 h-4 text-[#865f27] shrink-0 mt-0.5" />
                 <span>{COMPANY_DATA.offices.india.fullAddress}</span>
               </div>
 
-              <div className="pt-3 border-t border-neutral-100 flex flex-col sm:flex-row gap-2.5">
+              {/* Solid Action Buttons */}
+              <div className="grid grid-cols-2 gap-2.5">
                 <a
-                  href={COMPANY_DATA.offices.india.phone.raw ? `tel:${COMPANY_DATA.offices.india.phone.raw}` : COMPANY_DATA.primaryContact.phoneLink}
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#FAF7F0] border border-[#B89246]/30 text-xs font-semibold text-[#1A1815] active:scale-98"
+                  href={`tel:${COMPANY_DATA.offices.india.phone.raw}`}
+                  className="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-[#0c0d0e] hover:bg-[#22252a] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#865F27]" />
-                  <span>{COMPANY_DATA.offices.india.phone.display}</span>
+                  <Phone className="w-4 h-4 text-[#d4ab47]" />
+                  <span>Call Us</span>
                 </a>
 
                 <a
-                  href={COMPANY_DATA.offices.india.whatsapp?.link || COMPANY_DATA.primaryContact.whatsappLink}
+                  href={COMPANY_DATA.primaryContact.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#25D366]/10 border border-[#25D366]/40 text-[#137333] text-xs font-bold active:scale-98"
+                  className="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-[#128C7E] hover:bg-[#0d6e63] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                 >
-                  <div className="relative w-3.5 h-3.5 flex-shrink-0">
-                    <Image src="/wh.png" alt="WhatsApp" fill className="object-contain" />
-                  </div>
-                  <span>WhatsApp Desk</span>
+                  <WhatsappIcon className="w-4 h-4 fill-white" />
+                  <span>WhatsApp</span>
                 </a>
               </div>
             </div>
 
-            {/* Dubai Desk Card */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#B89246]/35 shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#865F27] bg-[#FAF7F0] px-2.5 py-1 rounded-md border border-[#E8DFD1]">
-                  {COMPANY_DATA.offices.dubai.badge}
+            {/* Dubai Office */}
+            <div className="p-6 rounded-2xl bg-white border border-[#ecdda9] shadow-sm">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white bg-[#865f27] px-2.5 py-1 rounded">
+                  Dubai Office
                 </span>
-                <Globe2 className="w-4 h-4 text-[#B89246]" />
+                <span className="text-xs font-semibold text-neutral-500">UAE Desk</span>
               </div>
 
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-[#1A1815] mb-1.5">
+              <h3 className="text-lg font-serif font-bold text-[#0c0d0e] mb-1">
                 {COMPANY_DATA.offices.dubai.name}
               </h3>
 
-              <div className="flex items-start gap-2 text-xs text-neutral-600 mb-4 leading-relaxed">
-                <MapPin className="w-4 h-4 text-[#B89246] flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 text-xs sm:text-sm text-neutral-600 mb-5 leading-relaxed">
+                <MapPin className="w-4 h-4 text-[#865f27] shrink-0 mt-0.5" />
                 <span>{COMPANY_DATA.offices.dubai.fullAddress}</span>
               </div>
 
-              <div className="pt-3 border-t border-neutral-100">
-                <a
-                  href={`tel:${COMPANY_DATA.offices.dubai.phone.raw}`}
-                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#FAF7F0] border border-[#B89246]/30 text-xs font-semibold text-[#1A1815] active:scale-98"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#865F27]" />
-                  <span>Call Dubai: {COMPANY_DATA.offices.dubai.phone.display}</span>
-                </a>
-              </div>
+              <a
+                href={`tel:${COMPANY_DATA.offices.dubai.phone.raw}`}
+                className="w-full flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-[#0c0d0e] hover:bg-[#22252a] text-white text-xs font-bold uppercase tracking-wider transition-colors"
+              >
+                <Phone className="w-4 h-4 text-[#d4ab47]" />
+                <span>Call: {COMPANY_DATA.offices.dubai.phone.display}</span>
+              </a>
             </div>
 
-            {/* Operations Tag */}
-            <div className="p-4 rounded-xl bg-white/80 border border-[#E8DFD1] flex items-center justify-between text-[11px] sm:text-xs text-neutral-600">
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-[#865F27]" />
-                <span>Mon–Sun: 9:30 AM – 7:30 PM IST</span>
-              </div>
-              <div className="flex items-center gap-1 text-[#137333] font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>RERA Verified</span>
-              </div>
+            {/* Operational Timing Strip */}
+            <div className="p-3.5 rounded-xl bg-white border border-[#ecdda9] flex items-center gap-2 text-xs font-medium text-neutral-700">
+              <Clock className="w-4 h-4 text-[#865f27] shrink-0" />
+              <span>Working Hours: Mon – Sun, 9:30 AM to 7:30 PM</span>
             </div>
 
           </div>
 
-          {/* RIGHT: Intake Form */}
+          {/* RIGHT: Inquiry Form */}
           <div className="lg:col-span-7">
-            <div className="p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-[#B89246]/45 shadow-sm">
-              <div className="mb-5 sm:mb-6">
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#1A1815]">
-                  Consultation Request
-                </h3>
-                <p className="text-xs text-neutral-500 mt-1">
-                  Fill in your requirements below. Our advisory lead will revert within 2 business hours.
-                </p>
+            <div className="h-full p-6 sm:p-8 rounded-2xl bg-white border border-[#ecdda9] shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="mb-5">
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0c0d0e]">
+                    Send an Inquiry
+                  </h3>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    Fill in your contact details below and our team will get in touch with you.
+                  </p>
+                </div>
+
+                {errorMsg && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs mb-4">
+                    {errorMsg}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div className="space-y-1">
+                      <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        placeholder="e.g. Amit Sharma"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
+                        Phone Number *
+                      </label>
+                      <div className="flex">
+                        <select
+                          name="countryCode"
+                          value={formData.countryCode}
+                          onChange={handleChange}
+                          className="inline-flex items-center px-2 py-2.5 rounded-l-xl border border-r-0 border-[#ecdda9] bg-[#f5eed6] text-[#0c0d0e] text-xs font-semibold focus:outline-none focus:border-[#b89246]"
+                        >
+                          <option value="+91">IN (+91)</option>
+                          <option value="+971">UAE (+971)</option>
+                          <option value="+44">UK (+44)</option>
+                          <option value="+1">US (+1)</option>
+                        </select>
+                        <input
+                          type="tel"
+                          name="phone"
+                          required
+                          placeholder="98765 43210"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="w-full px-3.5 py-2.5 rounded-r-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div className="space-y-1">
+                      <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="amit@gmail.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
+                        Project of Interest
+                      </label>
+                      <select
+                        name="project"
+                        value={formData.project}
+                        onChange={handleChange}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
+                      >
+                        <option value="">Select a property</option>
+                        {PROJECTS_DATA.map((p) => (
+                          <option key={p.id} value={p.title}>
+                            {p.title} ({p.location})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
+                      Message
+                    </label>
+                    <textarea
+                      name="message"
+                      rows={3}
+                      placeholder="Share your requirements or schedule a site visit..."
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e] resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 px-6 rounded-xl bg-[#b89246] hover:bg-[#a47b30] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-70"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Submit Inquiry</span>
+                        <Send className="w-4 h-4 ml-1" />
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-[11px] text-center text-neutral-500 pt-1">
+                    Your contact information is strictly kept confidential.
+                  </p>
+                </form>
               </div>
-
-              {errorMsg && (
-                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs mb-4">
-                  {errorMsg}
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-3.5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className="space-y-1">
-                    <label className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-[#865F27]">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      placeholder="e.g. Vikram Malhotra"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-[#FAF7F0] border border-[#E8DFD1] focus:border-[#B89246] focus:outline-none text-xs sm:text-sm text-[#1A1815]"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-[#865F27]">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      placeholder="+91 98765 43210"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-[#FAF7F0] border border-[#E8DFD1] focus:border-[#B89246] focus:outline-none text-xs sm:text-sm text-[#1A1815]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className="space-y-1">
-                    <label className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-[#865F27]">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="name@domain.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-[#FAF7F0] border border-[#E8DFD1] focus:border-[#B89246] focus:outline-none text-xs sm:text-sm text-[#1A1815]"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-[#865F27]">
-                      Project Selection
-                    </label>
-                    <select
-                      name="project"
-                      value={formData.project}
-                      onChange={handleChange}
-                      className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-[#FAF7F0] border border-[#E8DFD1] focus:border-[#B89246] focus:outline-none text-xs sm:text-sm text-[#1A1815]"
-                    >
-                      <option value="">General Portfolio Advisory</option>
-                      {PROJECTS_DATA.map((p) => (
-                        <option key={p.id} value={p.title}>
-                          {p.title} ({p.location})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-[#865F27]">
-                    Requirements or Budget Scope
-                  </label>
-                  <textarea
-                    name="message"
-                    rows={3}
-                    placeholder="Specify configurations, budget, or timelines..."
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-[#FAF7F0] border border-[#E8DFD1] focus:border-[#B89246] focus:outline-none text-xs sm:text-sm text-[#1A1815] resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3.5 px-6 rounded-xl bg-[#14171A] hover:bg-[#B89246] text-white hover:text-[#0C0D0E] font-semibold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 disabled:opacity-70 mt-2"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin text-[#B89246]" />
-                      <span>Transmitting Dossier...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Transmit Consultation Request</span>
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-
-                <p className="text-[10px] text-center text-neutral-500 pt-1">
-                  Total client privacy guaranteed. Details are never shared with third parties.
-                </p>
-              </form>
             </div>
           </div>
 

@@ -31,6 +31,7 @@ export interface CompanyInfo {
     dubai: OfficeLocation;
   };
   primaryContact: {
+    email: string,
     phoneDisplay: string;
     phoneLink: string;
     whatsappDisplay: string;
@@ -47,6 +48,7 @@ export const COMPANY_DATA: CompanyInfo = {
 
   // Quick-access global contact channels
   primaryContact: {
+    email: "realtyfmleads@gmail.com" ,
     phoneDisplay: "+91 99103 74156",
     phoneLink: "tel:+919910374156",
     whatsappDisplay: "+91 70420 80055",

@@ -1,154 +1,207 @@
+// src/components/overview/Overview.tsx
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowUpRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { useInView } from "framer-motion";
+import { ArrowRight, PhoneCall } from "lucide-react";
 import { COMPANY_DATA } from "@/data/company";
 
-const DEVELOPER_BADGES = [
-  { name: "Birla Estates", logo: "/Birla-Estate.webp" },
-  { name: "DLF", logo: "/DLF.webp" },
-  { name: "Godrej Properties", logo: "/Godrej-Properties.webp" },
-  { name: "Max Estates", logo: "/MAX-ESTATES.webp" },
-  { name: "Sobha Realty", logo: "/Sobha-Realty.webp" },
-  { name: "Lodha", logo: "/Lodha.webp" },
+interface CounterProps {
+  value: number;
+  duration?: number;
+  prefix?: string;
+  suffix?: string;
+}
+
+function Counter({ value, duration = 1600, prefix = "", suffix = "" }: CounterProps) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(easeOut * value));
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setCount(value);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isInView, value, duration]);
+
+  return (
+    <span ref={ref} className="font-sans font-black tracking-tight tabular-nums text-[#865f27]">
+      {prefix}
+      {count.toLocaleString()}
+      {suffix}
+    </span>
+  );
+}
+
+const STATS = [
+  {
+    target: 2000,
+    prefix: "",
+    suffix: "+",
+    label: "Happy Customers",
+    detail: "Families and investors guided into their ideal homes and commercial properties.",
+  },
+  {
+    target: 25,
+    prefix: "",
+    suffix: "+",
+    label: "Grade-A Builders",
+    detail: "Direct developer partnerships with Gaurs, ACE, Sobha, Godrej, and Max Estates.",
+  },
+  {
+    target: 100,
+    prefix: "",
+    suffix: "%",
+    label: "RERA Clear Titles",
+    detail: "Every listed project is verified for approved plans, clear title, and regulatory compliance.",
+  },
+  {
+    target: 10,
+    prefix: "",
+    suffix: "+ Years",
+    label: "Advisory Experience",
+    detail: "A decade of deep market insights and transparent transactions across Delhi-NCR.",
+  },
 ];
 
-export default function CompanyOverview() {
+export default function Overview() {
+  const scrollToPortfolio = () => {
+    const el = document.getElementById("portfolio");
+    if (el) {
+      const navOffset = 80;
+      const position = el.getBoundingClientRect().top + window.pageYOffset - navOffset;
+      window.scrollTo({ top: position, behavior: "smooth" });
+    } else {
+      window.location.hash = "#portfolio";
+    }
+  };
+
+  const scrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (el) {
+      const navOffset = 80;
+      const position = el.getBoundingClientRect().top + window.pageYOffset - navOffset;
+      window.scrollTo({ top: position, behavior: "smooth" });
+    } else {
+      window.location.hash = "#contact";
+    }
+  };
+
   return (
-    <section id="about" className="relative w-full bg-[#FAF8F5] py-16 sm:py-24 text-[#14171A] overflow-hidden border-b border-[#E8DFD1]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="about" className="relative z-10 w-full py-20 sm:py-28 bg-[#fbf7ee] text-[#0c0d0e] overflow-hidden">
+      
+      {/* Background Texture */}
+      <div 
+        className="absolute inset-0 opacity-[0.035] pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(#0c0d0e 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Eyebrow Tag */}
-        <div className="flex flex-col items-center text-center mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F5EFEB] border border-[#B89246]/30 text-[#865F27] text-[10px] sm:text-xs font-semibold uppercase tracking-[0.25em] mb-3">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#B89246]" />
-            <span>Overview • Realty FM</span>
+        {/* Top Header Block: Headline on Left, Brand Logo on Right */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-12 border-b border-[#ecdda9]">
+          
+          {/* Left: Heading & Proposition */}
+          <div className="max-w-2xl space-y-3 flex flex-col items-center text-center lg:items-start lg:text-left">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f5eed6] border border-[#d4ab47]/40 text-[#865f27] text-xs font-bold uppercase tracking-wider">
+              Company Overview
+            </div>
+
+            <h2 className="text-3xl sm:text-5xl font-bold font-serif tracking-tight text-[#0c0d0e] leading-tight">
+              More Than Real Estate Agents. <br />
+              <span className="text-[#a47b30] italic font-normal">
+                Your Strategic Property Partner.
+              </span>
+            </h2>
+
+            <p className="text-base sm:text-lg text-neutral-700 font-sans font-normal leading-relaxed pt-2">
+              At {COMPANY_DATA.brandName}, we help homebuyers and investors purchase premium real estate with clarity, direct developer access, and verified documentation. We manage the research, negotiation, and paperwork so you make confident decisions.
+            </p>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif text-[#14171A] tracking-tight leading-tight max-w-2xl">
-            Invest Only to <span className="italic text-[#865F27] font-normal">Gain Profit.</span>
-          </h2>
-          <div className="h-0.5 w-14 bg-[#B89246] mt-3" />
+          {/* Right: Brand Emblem Card with Next.js sizes prop */}
+            <div className="w-full lg:w-auto flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-3xl bg-white border border-[#ecdda9] shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
+              <div className="relative w-56 sm:w-64 h-16 sm:h-20 flex items-center justify-center">
+                <Image
+                  src="/logodark.png"
+                  alt={COMPANY_DATA.brandName}
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 224px, 256px"
+                  className="object-contain object-center"
+                />
+              </div>
+              <p className="text-xs font-bold text-[#865f27] tracking-widest uppercase mt-3 text-center">
+                Trusted Real Estate Advisory
+              </p>
+            </div>
+
         </div>
 
-        {/* Editorial Two-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          
-          {/* LEFT COLUMN: Narrative & Highlights */}
-          <div className="lg:col-span-7 space-y-5 text-neutral-700">
-            <h3 className="text-xl sm:text-2xl font-serif font-semibold text-[#14171A] tracking-tight">
-              About Realty FM
-            </h3>
-            
-            <p className="text-xs sm:text-sm md:text-base leading-relaxed">
-              Realty FM is a trusted name in residential real estate, known for bringing together a team of expert consultants who offer a wide range of property services. Under the visionary leadership of our founder <strong className="text-[#14171A] font-semibold">Anirudh Poddar</strong>, we have emerged as one of the leading real estate consultants for residential flats.
-            </p>
-
-            <p className="text-xs sm:text-sm md:text-base leading-relaxed">
-              With an impressive track record of exceptional sales and an unwavering commitment to customer satisfaction, Realty FM has set new standards in the real estate industry. Our team of over <strong className="text-[#14171A] font-semibold">50+ experienced professionals</strong> collaborates with renowned developers such as <span className="text-[#865F27] font-semibold">Ace, Gaur, Arihant, CRC, Tata Housing, ATS</span>, and many more.
-            </p>
-
-            <p className="text-xs sm:text-sm md:text-base leading-relaxed">
-              This partnership enables us to offer a diverse portfolio of high-quality apartments and flats tailored to meet various client preferences. With a client base of over <strong className="text-[#14171A] font-semibold">2,000+ satisfied customers</strong>, Realty FM has become a trusted choice for individuals seeking to buy or invest in residential properties.
-            </p>
-
-            {/* Credibility Key Takeaways */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-neutral-800">
-                <CheckCircle2 className="w-4 h-4 text-[#B89246] flex-shrink-0" />
-                <span>2,000+ Satisfied Property Investors</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-neutral-800">
-                <CheckCircle2 className="w-4 h-4 text-[#B89246] flex-shrink-0" />
-                <span>50+ Elite Advisory Professionals</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-neutral-800">
-                <CheckCircle2 className="w-4 h-4 text-[#B89246] flex-shrink-0" />
-                <span>Strategic Developer Direct Allocations</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-neutral-800">
-                <CheckCircle2 className="w-4 h-4 text-[#B89246] flex-shrink-0" />
-                <span>End-to-End Asset & Legal Advisory</span>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <a
-                href={COMPANY_DATA.primaryContact.whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#14171A] hover:bg-[#282C34] text-[#FAF8F5] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all shadow-md active:scale-98"
-              >
-                <span>Connect With An Advisor</span>
-                <ArrowUpRight className="w-4 h-4 text-[#B89246]" />
-              </a>
-
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-[#F5EFEB] border border-[#B89246]/40 text-[#14171A] text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-sm active:scale-98"
-              >
-                <span>Book Consultation</span>
-                <ArrowUpRight className="w-4 h-4 text-[#865F27]" />
-              </Link>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Executive Visual Card & Developer Badges */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
-            {/* Stat Showcase Card */}
-            <div className="rounded-2xl bg-white p-6 sm:p-8 border border-[#B89246]/35 shadow-[0_4px_20px_rgba(184,146,70,0.06)]">
-              <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#865F27] block mb-1">
-                Executive Leadership
-              </span>
-              <h4 className="text-xl sm:text-2xl font-serif font-bold text-[#14171A]">
-                Anirudh Poddar
-              </h4>
-              <p className="text-xs text-neutral-500 font-medium mb-5">
-                Founder & Managing Director, Realty FM
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-neutral-100">
-                <div className="flex flex-col">
-                  <span className="text-2xl sm:text-3xl font-serif font-bold text-[#865F27]">2,000+</span>
-                  <span className="text-[10px] sm:text-xs text-neutral-500 uppercase tracking-wider mt-0.5">Satisfied Customers</span>
+        {/* 2. Bold, Modern Number Tickers */}
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {STATS.map((stat) => (
+            <div
+              key={stat.label}
+              className="p-6 sm:p-7 rounded-2xl bg-white border border-[#ecdda9] shadow-[0_8px_25px_rgba(0,0,0,0.03)] hover:border-[#b89246] transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-sans font-black tracking-tight leading-none">
+                  <Counter
+                    value={stat.target}
+                    prefix={stat.prefix}
+                    suffix={stat.suffix}
+                  />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-2xl sm:text-3xl font-serif font-bold text-[#865F27]">50+</span>
-                  <span className="text-[10px] sm:text-xs text-neutral-500 uppercase tracking-wider mt-0.5">Consultants Team</span>
-                </div>
+                <h3 className="mt-3 text-base font-bold text-[#0c0d0e]">
+                  {stat.label}
+                </h3>
               </div>
-            </div>
-
-            {/* Developer Partner Badges */}
-            <div className="rounded-2xl bg-white/80 p-5 border border-[#B89246]/25 shadow-sm">
-              <p className="text-[10px] uppercase tracking-[0.25em] text-[#865F27] font-bold mb-3.5 text-center">
-                Authorized Advisory Network
+              <p className="mt-2 text-xs sm:text-sm text-neutral-600 leading-normal">
+                {stat.detail}
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
-                {DEVELOPER_BADGES.map((item) => (
-                  <div
-                    key={item.name}
-                    className="flex items-center justify-center h-12 bg-white rounded-lg border border-[#E8DFD1] p-1.5"
-                  >
-                    <div className="relative w-full h-7">
-                      <Image
-                        src={item.logo}
-                        alt={item.name}
-                        fill
-                        className="object-contain filter grayscale opacity-90"
-                        sizes="(max-width: 640px) 110px, 130px"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
-          </div>
+          ))}
+        </div>
 
+        {/* 3. Action Buttons */}
+        <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={scrollToPortfolio}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#b89246] hover:bg-[#a47b30] text-white font-bold text-sm uppercase tracking-wider shadow-lg active:scale-95 transition-all cursor-pointer"
+          >
+            <span>Explore Curated Projects</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={scrollToContact}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-white border border-[#d4ab47] hover:bg-[#f5eed6] text-[#865f27] font-bold text-sm uppercase tracking-wider shadow-sm active:scale-95 transition-all cursor-pointer"
+          >
+            <PhoneCall className="w-4 h-4" />
+            <span>Schedule Consultation</span>
+          </button>
         </div>
 
       </div>

@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navigation/Navbar";
-import Footer from "@/components/navigation/Footer";
-import RealtyChatbot from "@/components/chat/RealtyChatbot";
+
+import FloatingActions from "@/components/chat/FloatingActions";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -133,10 +132,10 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[#0c0d0e] text-[#f8f9fa] antialiased selection:bg-[#b89246]/20 selection:text-[#d4ab47]">
-        <Navbar/>
+
         {children}
-        <Footer/>
-        <RealtyChatbot/>
+
+        <FloatingActions/>
       </body>
     </html>
   );
