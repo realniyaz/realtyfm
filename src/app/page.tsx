@@ -8,6 +8,7 @@ import WhyChooseUs from "@/components/hero/WhyRealtyFm";
 import FAQ from "@/components/hero/FAQ";
 import ContactCTA from "@/components/hero/ContactCTA";
 import Footer from "@/components/navigation/Footer";
+import BuyingProcess from "@/components/hero/BuyingProcess";
 
 export default function Home() {
   return (
@@ -16,10 +17,12 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Overview/>
-      <ConsultationCTA/>
+      
       <Portfolio/>
       
       <WhyChooseUs/>
+      <ConsultationCTA/>
+      <BuyingProcess/>
       <FAQ/>
       <ContactCTA/>
       <Footer/>

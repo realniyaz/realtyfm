@@ -1,7 +1,7 @@
 // src/components/contact/ContactCTA.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Phone,
@@ -9,10 +9,8 @@ import {
   Loader2,
   MapPin,
   Clock,
-  Building2,
 } from "lucide-react";
 import { COMPANY_DATA } from "@/data/company";
-import { PROJECTS_DATA } from "@/data/projects";
 
 const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" {...props}>
@@ -32,28 +30,11 @@ export default function ContactCTA() {
     countryCode: "+91",
     phone: "",
     email: "",
-    project: "",
     message: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    const handleProjectSelect = (e: Event) => {
-      const customEvent = e as CustomEvent<{ projectName: string }>;
-      if (customEvent.detail?.projectName) {
-        setFormData((prev) => ({
-          ...prev,
-          project: customEvent.detail.projectName,
-        }));
-      }
-    };
-
-    window.addEventListener("realtyfm:select_project", handleProjectSelect);
-    return () =>
-      window.removeEventListener("realtyfm:select_project", handleProjectSelect);
-  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -221,7 +202,7 @@ export default function ContactCTA() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div className="space-y-1">
                       <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
-                        Full Name *
+                        Your Name *
                       </label>
                       <input
                         type="text"
@@ -263,39 +244,18 @@ export default function ContactCTA() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div className="space-y-1">
-                      <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="amit@gmail.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
-                        Project of Interest
-                      </label>
-                      <select
-                        name="project"
-                        value={formData.project}
-                        onChange={handleChange}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
-                      >
-                        <option value="">Select a property</option>
-                        {PROJECTS_DATA.map((p) => (
-                          <option key={p.id} value={p.title}>
-                            {p.title} ({p.location})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  <div className="space-y-1">
+                    <label className="text-[11px] uppercase tracking-wider font-semibold text-neutral-700">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="amit@gmail.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbf7ee] border border-[#ecdda9] focus:border-[#b89246] focus:outline-none text-xs sm:text-sm text-[#0c0d0e]"
+                    />
                   </div>
 
                   <div className="space-y-1">

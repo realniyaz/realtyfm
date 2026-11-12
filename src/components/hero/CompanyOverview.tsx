@@ -53,7 +53,7 @@ function Counter({ value, duration = 1600, prefix = "", suffix = "" }: CounterPr
 
 const STATS = [
   {
-    target: 2000,
+    target: 1000,
     prefix: "",
     suffix: "+",
     label: "Happy Customers",
@@ -74,7 +74,7 @@ const STATS = [
     detail: "Every listed project is verified for approved plans, clear title, and regulatory compliance.",
   },
   {
-    target: 10,
+    target: 5,
     prefix: "",
     suffix: "+ Years",
     label: "Advisory Experience",

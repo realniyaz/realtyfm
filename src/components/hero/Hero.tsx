@@ -100,9 +100,9 @@ export default function Hero({ onSelectProject }: HeroProps) {
           </span>
         </h1>
 
-        <p className="mt-4 sm:mt-5 text-sm sm:text-lg md:text-xl text-neutral-100 max-w-2xl font-sans font-normal leading-relaxed drop-shadow">
+        {/* <p className="mt-4 sm:mt-5 text-sm sm:text-lg md:text-xl text-neutral-100 max-w-2xl font-sans font-normal leading-relaxed drop-shadow">
           Direct access to the finest residential homes, commercial hubs, and luxury developments across Noida, Yamuna Expressway, and Gurugram.
-        </p>
+        </p> */}
 
         {/* 3. Search Bar Console Container */}
         <div ref={searchContainerRef} className="relative w-full max-w-3xl mt-8 sm:mt-10">

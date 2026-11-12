@@ -48,7 +48,7 @@ export const COMPANY_DATA: CompanyInfo = {
 
   // Quick-access global contact channels
   primaryContact: {
-    email: "realtyfmleads@gmail.com" ,
+    email: "info@realtyfm.com" ,
     phoneDisplay: "+91 99103 74156",
     phoneLink: "tel:+919910374156",
     whatsappDisplay: "+91 70420 80055",
@@ -63,11 +63,12 @@ export const COMPANY_DATA: CompanyInfo = {
       badge: "Headquarters",
       country: "India",
       addressLines: [
-        "B 625, Alphathum",
-        "Sector-90, Noida",
-        "Uttar Pradesh, India",
+
+        "Unit NO-16, 30th Floor",
+        "Wave One Silver Tower",
+        " Sector -18 Noida",
       ],
-      fullAddress: "B 625, Alphathum, Sector-90, Noida, UP, India",
+      fullAddress: "Unit NO-16, 30th Floor Wave One Silver Tower Sector -18 Noida",
       phone: {
         display: "+91 99103 74156",
         raw: "+919910374156",
