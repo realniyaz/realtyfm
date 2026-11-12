@@ -152,7 +152,7 @@ export default function Footer() {
           </p>
 
           <p className="text-[11px] text-neutral-400 pt-1">
-            &copy; {currentYear} {COMPANY_DATA.brandName}. All rights reserved.
+            &copy; {currentYear} {COMPANY_DATA.brandName}. All rights reserved | Terra Struct LLP
           </p>
         </div>
       </div>
